@@ -1,11 +1,15 @@
-name: Destroy Infra
+name: Destroy with Terraform
 
 on:
   workflow_dispatch:
 
 jobs:
-  destroy:
+  Terraform_destroy :
     runs-on: ubuntu-latest
+
+    env :
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
       - name: Checkout code
@@ -18,14 +22,8 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./CD/terraform-aws-instance
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        working-directory: ./terraform-aws-instance
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./CD/terraform-aws-instance
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        working-directory: ./terraform-aws-instance
